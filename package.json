@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@windmill/react-ui": "^0.5.1",
     "mercadolibre-nodejs-sdk": "^3.0.1",
     "next": "10.0.7",
     "react": "17.0.1",

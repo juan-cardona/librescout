@@ -3,10 +3,10 @@ import styles from '../styles/Home.module.css'
 
 import fetch from 'node-fetch'
 import {RestClientApi} from 'mercadolibre-nodejs-sdk'
-
+import { Windmill } from '@windmill/react-ui'
 
 const category = 'MLM1430'
-const accessToken = 'APP_USR-3249860603230326-022616-ef22fd2f3068028117261924ff6b1693-531228956'
+const accessToken = 'APP_USR-3249860603230326-022622-2b2d95a8eed3d17dd604610ae55fc53f-531228956'
 const api = `https://api.mercadolibre.com/sites/MLM/search?category=${category}&access_token=${accessToken}`
 
 
@@ -21,7 +21,7 @@ export async function getStaticProps() {
 
 const Home = ({posts}) => {
   return (
-    <div>
+    <Windmill usePreferences>
       <h1 className="text-3xl text-yellow-400 text-center">Todos los productos</h1>
      {posts.results.map(post => (
        <div key="id">
@@ -32,7 +32,7 @@ const Home = ({posts}) => {
         </a>
        </div>
      ))} 
-    </div>
+    </Windmill>
   );
 }
            
