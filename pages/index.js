@@ -1,8 +1,7 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+
 
 import fetch from 'node-fetch'
-import {RestClientApi} from 'mercadolibre-nodejs-sdk'
 import { Windmill } from '@windmill/react-ui'
 
 const category = 'MLM1430'
