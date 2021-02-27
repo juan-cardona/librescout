@@ -16,13 +16,27 @@ import {
   Button,
   Pagination,
 } from '@windmill/react-ui'
-import { EditIcon, TrashIcon } from '../icons'
+
 
 import response from '../utils/demo/tableData'
 // make a copy of the data, for the second table
 const response2 = response.concat([])
 
-function Tables() {
+const category = 'MLM1430'
+const accessToken = 'APP_USR-3249860603230326-022622-2b2d95a8eed3d17dd604610ae55fc53f-531228956'
+const api = `https://api.mercadolibre.com/sites/MLM/search?category=${category}&access_token=${accessToken}`
+
+
+export async function getStaticProps() {
+  const res = await fetch(api);
+  const data = await res.json();
+  
+  return {
+    props: { posts : data }
+  }
+}
+
+function Tables({posts}) {
   /**
    * DISCLAIMER: This code could be badly improved, but for the sake of the example
    * and readability, all the logic for both table are here.
@@ -41,7 +55,7 @@ function Tables() {
 
   // pagination setup
   const resultsPerPage = 10
-  const totalResults = response.length
+  const totalResults = posts.results.length
 
   // pagination change control
   function onPageChangeTable1(p) {
@@ -56,7 +70,7 @@ function Tables() {
   // on page change, load new sliced data
   // here you would make another server request for new data
   useEffect(() => {
-    setDataTable1(response.slice((pageTable1 - 1) * resultsPerPage, pageTable1 * resultsPerPage))
+    setDataTable1(posts.results.slice((pageTable1 - 1) * resultsPerPage, pageTable1 * resultsPerPage))
   }, [pageTable1])
 
   // on page change, load new sliced data
@@ -76,32 +90,32 @@ function Tables() {
         <Table>
           <TableHeader>
             <tr>
-              <TableCell>Product</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Producto</TableCell>
+              <TableCell>Precio</TableCell>
+              <TableCell>Unidades Vendidas</TableCell>
               <TableCell>Date</TableCell>
             </tr>
           </TableHeader>
           <TableBody>
-            {dataTable1.map((user, i) => (
+            {posts.results.map((post, i) => (
               <TableRow key={i}>
                 <TableCell>
                   <div className="flex items-center text-sm">
-                    <Avatar className="hidden mr-3 md:block" src={user.avatar} alt="User avatar" />
+                    <Avatar className="hidden mr-3 md:block" src={post.thumbnail} alt="User avatar" />
                     <div>
-                      <p className="font-semibold">{user.name}</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">{user.job}</p>
+                      <p className="font-semibold">{post.title}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{post.job}</p>
                     </div>
                   </div>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">$ {user.amount}</span>
+                  <span className="text-sm">$ {post.price}</span>
                 </TableCell>
                 <TableCell>
-                  <Badge type={user.status}>{user.status}</Badge>
+                  <span className="text-sm">{post.sold_quantity}</span>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm">{new Date(user.date).toLocaleDateString()}</span>
+                  <span className="text-sm">{new Date(post.date).toLocaleDateString()}</span>
                 </TableCell>
               </TableRow>
             ))}
@@ -153,10 +167,10 @@ function Tables() {
                 <TableCell>
                   <div className="flex items-center space-x-4">
                     <Button layout="link" size="icon" aria-label="Edit">
-                      <EditIcon className="w-5 h-5" aria-hidden="true" />
+
                     </Button>
                     <Button layout="link" size="icon" aria-label="Delete">
-                      <TrashIcon className="w-5 h-5" aria-hidden="true" />
+
                     </Button>
                   </div>
                 </TableCell>
